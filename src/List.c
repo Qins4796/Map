@@ -1,0 +1,22 @@
+#include "List.h"
+#include <stdio.h>
+#include <malloc.h>
+
+List *listNew(void *data, List *next){
+	List *list = malloc(sizeof(List));
+	list->data = data;
+	list->next = next;
+	return list;
+}
+
+// List *listAdd(void *newData, List *list){
+	// list = listNew(newData, list);
+	// return list;
+// }
+
+void listDump(List *list, void (*dump)(void *)){
+	while(list !=NULL) {
+	 dump(list->data);
+	 list = list->next;
+	}
+}
