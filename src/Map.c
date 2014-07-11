@@ -35,9 +35,9 @@ void *mapFind(Map *map,
 						 void *element,
 						 int (*compare)(void *, void *),
 						 unsigned int (*hash)(void *)){
-	int value;	value = hash(element);		
+	int value;
+	value = hash(element);		
   List *tempMap = (List *)map->bucket[value];
-			 
   
 	if(map->bucket[value] != NULL){
     tempMap = tempMap->next;
@@ -49,4 +49,25 @@ void *mapFind(Map *map,
       else return NULL;
       }
 	}
+}
+
+void *mapRemove(Map *map,
+						 void *element,
+						 int (*compare)(void *, void *),
+						 unsigned int (*hash)(void *)){
+  int value;	
+  value = hash(element);
+  List *tempMap = (List *)map->bucket[value];
+  List *temp;
+  
+	if(map->bucket[value] != NULL){
+      tempMap = tempMap->next;
+      while(((List *)map->bucket[value])!=NULL){
+      if(compare(((List *)map->bucket[value])->data, element) == 1){
+        ((List *)map->bucket[value])->data = NULL;
+        return ((List *)map->bucket[value])->data;
+      }
+      else return NULL;
+      }
+    }
 }

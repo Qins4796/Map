@@ -38,6 +38,8 @@ void test_mapStore_given_Ali_should_add_it_to_map(void){
 	TEST_ASSERT_EQUAL_Person(person,(Person *)((List *)map->bucket[3])->data);
 	
 	TEST_ASSERT_EQUAL_Person(person,getPersonFromBucket(map->bucket[3]));
+  
+  // TEST_ASSERT_EQUAL_PERSON("Ali",25,70.3,getPersonFromBucket(map->bucket[3]));
 	
 }
 void test_mapStore_given_Ali_but_Ali_is_same_in_Map(){
@@ -89,7 +91,7 @@ void test_mapStore_given_Zorro_added_into_Ali_in_the_Map(){
 ///////////////////
 //   MAP FIND    //
 ///////////////////
-void test_given_Ali_and_ali_is_in_the_Map_should_return_Ali_object1(){
+void test_mapFind_given_Ali_and_ali_is_in_the_Map_should_return_Ali_object1(){
   Person *Ali = personNew("Ali",25,70.3);
   Person *person;
   List *list = listNew(Ali, NULL);
@@ -104,7 +106,7 @@ void test_given_Ali_and_ali_is_in_the_Map_should_return_Ali_object1(){
   TEST_ASSERT_EQUAL_Person(Ali,getPersonFromBucket(map->bucket[5]));
   
 }
-void test_given_Ali_and_ali_is_not_in_the_Map_should_return_NULL_since_no_Ali_object_in_Map2(){
+void test_mapFind_given_Ali_and_ali_is_not_in_the_Map_should_return_NULL_since_no_Ali_object_in_Map2(){
   Person *Ali = personNew("Ali",25,70.3);
   Person *person;
   List *list = listNew(Ali, NULL);
@@ -118,7 +120,7 @@ void test_given_Ali_and_ali_is_not_in_the_Map_should_return_NULL_since_no_Ali_ob
 
   TEST_ASSERT_NULL(person);
 }
-void test_given_Ali_and_ali_is_in_the_linkedList_in_the_map_should_return_Ali_object3(){
+void test_mapFind_given_Ali_and_ali_is_in_the_linkedList_in_the_map_should_return_Ali_object3(){
   Person *Ali = personNew("Ali",25,70.3);
 	Person *Zorro = personNew("Zorro",60,55.4);
   Person *person;
@@ -136,7 +138,7 @@ void test_given_Ali_and_ali_is_in_the_linkedList_in_the_map_should_return_Ali_ob
   TEST_ASSERT_EQUAL_Person(Ali,person);
   
 }
-void test_given_Ali_and_ali_is_not_in_the_linkedList_in_the_map_should_return_NULL4(){
+void test_mapFind_given_Ali_and_ali_is_not_in_the_linkedList_in_the_map_should_return_NULL4(){
   Person *Ali = personNew("Ali",25,70.3);
 	Person *Zorro = personNew("Zorro",60,55.4);
 	Person *Abu = personNew("Abu",60,55.4);
@@ -152,4 +154,111 @@ void test_given_Ali_and_ali_is_not_in_the_linkedList_in_the_map_should_return_NU
   person = mapFind(map , Ali ,comparePerson, hash);
   
   TEST_ASSERT_NULL(person);
+}
+////////////////////
+//   MAP REMOVE   //
+////////////////////
+void test_mapRemove_given_Ali_and_ali_is_in_the_Map_should_return_Ali_object1(){
+  Person *Ali = personNew("Ali",25,70.3);
+  List *list = listNew(Ali, NULL);
+	Map *map = mapNew(5);
+  Person *person;
+	
+	map->bucket[5] = list;
+  hash_ExpectAndReturn(Ali,5);
+  
+  person = mapRemove(map , Ali ,comparePerson, hash);
+  
+  // listDump(list, personDump);
+  
+  TEST_ASSERT_NULL(person);
+  TEST_ASSERT_NULL(getPersonFromBucket(map->bucket[5]));
+}
+void test_mapRemove_given_Ali_and_ali_is_not_in_the_Map_should_return_NULL_since_no_Ali_object_in_Map2(){
+  Person *Ali = personNew("Ali",25,70.3);
+  List *list = listNew(Ali, NULL);
+	Map *map = mapNew(5);
+  Person *person;
+	
+	// map->bucket[5] = list; // no add
+  hash_ExpectAndReturn(Ali,5);
+  comparePerson(Ali,Ali);
+  
+  person = mapRemove(map , Ali ,comparePerson, hash);
+  
+  TEST_ASSERT_NULL(map->bucket[5]);
+  TEST_ASSERT_NULL(person);
+}
+void test_mapRemove_given_Ali_and_ali_is_in_the_linkedList_in_the_map_should_return_Ali_object3(){
+  Person *Ali = personNew("Ali",25,70.3);
+	Person *Zorro = personNew("Zorro",60,55.4);
+  Person *person;
+  
+  List *list = listNew(Ali, NULL);
+  list = listAdd(Zorro,list);
+  
+  Map *map = mapNew(5);
+  map->bucket[5] = list;
+  hash_ExpectAndReturn(Zorro,5);
+  
+  // listDump(list, personDump);
+  
+  person = mapRemove(map , Zorro ,comparePerson, hash);
+  
+  // listDump(list, personDump);
+  
+  TEST_ASSERT_NULL(person);
+  TEST_ASSERT_NULL(getPersonFromBucket(map->bucket[5]));
+  TEST_ASSERT_NOT_NULL(getPersonFromBucket(((List *)map->bucket[5])->next));
+  TEST_ASSERT_EQUAL_Person(Ali,getPersonFromBucket(((List *)map->bucket[5])->next));
+  
+}
+void test_mapRemove_given_Ali_and_ali_is_not_in_the_linkedList_in_the_map_should_return_NULL4(){
+  Person *Ali = personNew("Ali",25,70.3);
+	Person *Zorro = personNew("Zorro",60,55.4);
+	Person *Kikuri = personNew("Kikuri",50,40.4);
+  Person *person;
+
+  List *list = listNew(Kikuri, NULL);
+  list = listAdd(Zorro,list);
+  
+  Map *map = mapNew(5);
+  map->bucket[5] = list;
+  hash_ExpectAndReturn(Ali,5);
+  
+  // listDump(list, personDump);
+  
+  person = mapRemove(map , Ali ,comparePerson, hash);
+  
+  // listDump(list, personDump);
+  
+  TEST_ASSERT_NULL(person);
+  TEST_ASSERT_NOT_NULL(getPersonFromBucket(map->bucket[5]));
+}
+void test_mapRemove_given_Ali_and_ali_is_in_the_list_of_3_element_in_the_map_and_should_remove_Ali_and_return_it_to_caller(){
+  Person *Ali = personNew("Ali",25,70.3);
+	Person *Zorro = personNew("Zorro",60,55.4);
+	Person *Kikuri = personNew("Kikuri",48,46.4);
+  Person *person;
+
+  List *list = listNew(Ali, NULL);
+  list = listAdd(Zorro,list);
+  list = listAdd(Kikuri,list);
+  
+  Map *map = mapNew(5);
+  map->bucket[5] = list;
+  hash_ExpectAndReturn(Kikuri,5);
+  
+  // listDump(list, personDump);
+  
+  person = mapRemove(map , Kikuri ,comparePerson, hash);
+  
+  // listDump(list, personDump);
+  
+  TEST_ASSERT_NULL(person);
+  TEST_ASSERT_NULL(getPersonFromBucket(map->bucket[5]));
+  TEST_ASSERT_NOT_NULL(getPersonFromBucket(((List *)map->bucket[5])->next));
+  TEST_ASSERT_NOT_NULL(getPersonFromBucket(((List *)map->bucket[5])->next->next));
+  TEST_ASSERT_EQUAL_Person(Zorro,getPersonFromBucket(((List *)map->bucket[5])->next));
+  TEST_ASSERT_EQUAL_Person(Ali,getPersonFromBucket(((List *)map->bucket[5])->next->next));
 }

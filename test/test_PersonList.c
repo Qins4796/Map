@@ -27,5 +27,5 @@ void test_PersonList_explore(void){
 	TEST_ASSERT_NOT_NULL(nextList);
 	TEST_ASSERT_EQUAL_STRING("Ali", ((Person *)nextList->data)->name);
 	
-	listDump(list, personDump);
+	// listDump(list, personDump);
 }

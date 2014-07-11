@@ -19,4 +19,8 @@ void *mapFind(Map *map,
 						 void *element,
 						 int (*compare)(void *, void *),
 						 unsigned int (*hash)(void *));
+void *mapRemove(Map *map,
+						 void *element,
+						 int (*compare)(void *, void *),
+						 unsigned int (*hash)(void *));
 #endif // Map_H

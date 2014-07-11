@@ -8,4 +8,9 @@
 
 void assertEqualPerson(Person *expected, Person *actual, int line, char *msg);
 
+#define TEST_ASSERT_EQUAL_PERSON(expectedName, expectedAge, expectedWeight, actual)		\
+								assertEqualPerson(expectedName, expectedAge, expectedWeight, actual,__LINE__,NULL)
+
+void assertEqualPERSON(char *expectedName, int expectedAge, float expectedWeight, Person *actual, int line, char *msg);
+
 #endif // CustomAssert_H

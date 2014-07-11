@@ -7,7 +7,7 @@ void tearDown(void){}
 void test_personDump_explore(void){
 	Person *person = personNew("Ali",23,64.8);
 	
-	personDump(person);
+	// personDump(person);
 }
 
 void test_personNew_given_Ali_23_64_should_create_the_Person(void){
