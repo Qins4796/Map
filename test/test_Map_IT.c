@@ -1,8 +1,8 @@
 #include "unity.h"
 #include "Map.h"
 #include "Person.h"
-#include "mock_ComparePerson.h"
-// #include "ComparePerson.h"
+// #include "mock_ComparePerson.h"
+#include "ComparePerson.h"
 #include "mock_Hash.h"
 #include "List.h"
 #include "CustomAssert.h"
@@ -48,8 +48,8 @@ void test_mapStore_given_Ali_but_Ali_is_same_in_Map(){
 	
 	map->bucket[3] =list;
 	hash_ExpectAndReturn(person,3);
-	comparePerson_ExpectAndReturn(person,person,1);
-	// comparePerson(person,person);
+	// comparePerson_ExpectAndReturn(person,person,1);
+	comparePerson(person,person);
 	
 	Try{
 		mapStore(map , person ,comparePerson, hash);
@@ -68,12 +68,12 @@ void test_mapStore_given_Zorro_added_into_Ali_in_the_Map(){
 	List *list = listNew(person, NULL);
 	Map *map = mapNew(5);
 	
-	map->bucket[3] =list;
+	map->bucket[3] = list;
 	// hash_ExpectAndReturn(person,3);
 	// comparePerson_ExpectAndReturn(person,person,1);
 	hash_ExpectAndReturn(Zorro,3);
-	comparePerson_ExpectAndReturn(person,Zorro,0);
-	// comparePerson(person,Zorro);
+	// comparePerson_ExpectAndReturn(person,Zorro,0);
+	comparePerson(person,Zorro);
 	
 	Try{
 		mapStore(map , Zorro ,comparePerson, hash);
@@ -129,7 +129,7 @@ void test_given_Ali_and_ali_is_in_the_linkedList_in_the_map_should_return_Ali_ob
   Map *map = mapNew(5);
   map->bucket[5] = list;
   hash_ExpectAndReturn(Ali,5);
-  comparePerson_ExpectAndReturn(Ali,Ali,1);
+  
   person = mapFind(map , Ali ,comparePerson, hash);
   
   TEST_ASSERT_NOT_NULL(person);
@@ -141,5 +141,15 @@ void test_given_Ali_and_ali_is_not_in_the_linkedList_in_the_map_should_return_NU
 	Person *Zorro = personNew("Zorro",60,55.4);
 	Person *Abu = personNew("Abu",60,55.4);
   Person *person;
-
+  
+  List *list = listNew(Abu, NULL);
+  list = listAdd(Zorro,list);
+  
+  Map *map = mapNew(5);
+  map->bucket[5] = list;
+  hash_ExpectAndReturn(Ali,5);
+  
+  person = mapFind(map , Ali ,comparePerson, hash);
+  
+  TEST_ASSERT_NULL(person);
 }

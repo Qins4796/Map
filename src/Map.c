@@ -23,8 +23,11 @@ void mapStore(Map *map,
 	List *list = listNew(element , NULL);
 	if(map->bucket[value] != NULL){
 		if(compare(((List *)map->bucket[value])->data, element) == 1)Throw(ERR_SAME_ELEMENT);
+		map->bucket[value] = listNew(element, map->bucket[value]);
 	}
-	else{map->bucket[value] = list;}
+	else{
+	map->bucket[value] = listNew(element, map->bucket[value]);
+	}
 	
 }
 
@@ -32,5 +35,18 @@ void *mapFind(Map *map,
 						 void *element,
 						 int (*compare)(void *, void *),
 						 unsigned int (*hash)(void *)){
-return NULL;
+	int value;	value = hash(element);		
+  List *tempMap = (List *)map->bucket[value];
+			 
+  
+	if(map->bucket[value] != NULL){
+    tempMap = tempMap->next;
+    while(tempMap !=NULL){
+      // if(compare(((List *)map->bucket[value])->data, ((Person *)element)->name) == 1){
+      if(compare(tempMap->data, element) == 1){
+        return element;
+      }
+      else return NULL;
+      }
+	}
 }
